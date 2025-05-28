@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import redBookmark from '../../images/bookmark-red.png';
+import whiteBookmark from '../../images/bookmark-white.png';
+import { PlaceInfoContext } from './PlaceInfoContext';
 
-export default function PlaceCard() {
-    const [liked, setLiked] = useState(false);
+export default function PlaceCard({ place }) {
+    const { openInfo, likedMap, toggleLike } = useContext(PlaceInfoContext);
 
-    const toggleLike = () => {
-        setLiked(!liked);
+    const handleBookmarkClick = (e) => {
+        e.stopPropagation();
+        toggleLike(place.title);
     };
 
+    const handleClick = () => {
+        openInfo(place);
+    };
+
+    if (!place) return null;
+    const isLiked = likedMap[place.title] || false;
+
     return (
-        <div className="place-card">
-            <div className="place-card-img">
-                {/* 이미지 영역 */}
-            </div>
+        <div className="place-card" onClick={handleClick}>
+            <div className="place-card-img" />
             <div className="place-card-content">
                 <div className="place-card-title">
-                    <span>스타벅스</span>
-                    <button className="bookmark" onClick={toggleLike}>
-                        {liked ? "♥" : "♡"}
+                    <b>{place.title}</b>
+                    <button className="bookmark" onClick={handleBookmarkClick}>
+                        <img src={isLiked ? redBookmark : whiteBookmark} alt="북마크 아이콘" />
                     </button>
                 </div>
-                <p>여기는 설명글을 적는 곳 입니다.</p>
+                <p>{place.description}</p>
                 <br />
-                <br />
-                <p>리뷰 60 / 평균 10,000원</p>
+                <p>리뷰 {place.reviews}</p>
             </div>
         </div>
     );

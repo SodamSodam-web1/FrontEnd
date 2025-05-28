@@ -1,5 +1,5 @@
+// Header.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 import '../App.css';
 
 export default function Header() {
@@ -7,7 +7,7 @@ export default function Header() {
         <header className="header">
             <div className="logo">소담소담</div>
             <div className="search">
-                <input type="text" placeholder="장소, 주소 등 검색" />
+                <input type="text" placeholder="장소, 주소 등 검색" id="search-place"/>
             </div>
         </header>
     );

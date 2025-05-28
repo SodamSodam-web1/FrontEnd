@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import '../components/Header.js';
 
 const SimpleMap = () => {
     useEffect(() => {
