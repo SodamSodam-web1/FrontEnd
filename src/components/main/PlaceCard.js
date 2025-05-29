@@ -30,7 +30,7 @@ export default function PlaceCard({ place }) {
                 </div>
                 <p>{place.description}</p>
                 <br />
-                <p>리뷰 {place.reviews.length}</p>
+                <p>리뷰 {place.reviews}</p>
             </div>
         </div>
     );
