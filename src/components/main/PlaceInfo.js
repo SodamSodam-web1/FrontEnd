@@ -5,6 +5,8 @@ import redBookmark from '../../images/bookmark-red.png';
 import whiteBookmark from '../../images/bookmark-white.png';
 import { PlaceInfoContext } from './PlaceInfoContext';
 import reviewIcon from '../../images/review-icon.png';
+import 'react-calendar/dist/Calendar.css';
+import '../../App.css'
 
 export default function PlaceInfo({ data }) {
     const { closeInfo, likedMap, toggleLike } = useContext(PlaceInfoContext);
@@ -29,7 +31,7 @@ export default function PlaceInfo({ data }) {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        setSelectedTime(null);  // 날짜 바뀌면 시간 초기화
+        setSelectedTime(null);
     };
 
     const handleTimeClick = (time) => {
@@ -38,21 +40,21 @@ export default function PlaceInfo({ data }) {
 
     const handleConfirmBooking = () => {
         alert(`예약 완료!\n날짜: ${selectedDate.toLocaleDateString()}\n시간: ${selectedTime}`);
-        // 여기서 서버 요청 등 추가 가능
-        setIsBooking(false);  // 예약 완료 후 다시 기본 화면으로
+        setIsBooking(false);
     };
 
     return (
         <div className="place-info">
             <div className="place-info-img" style={{ position: 'relative' }}>
                 <button onClick={closeInfo} style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
+                    position: 'sticky',
+                    top: '15px',
+                    left: '230px',
                     background: 'transparent',
                     border: 'none',
                     fontSize: '16px',
                     cursor: 'pointer',
+                    zIndex:9999
                 }}>✕</button>
             </div>
 
@@ -81,9 +83,26 @@ export default function PlaceInfo({ data }) {
                 )}
 
                 {isBooking && (
-                    <div className="booking-section" style={{ marginTop: '12px' }}>
-                        <p><b>예약 날짜 선택</b></p>
-                        <Calendar onChange={handleDateChange} value={selectedDate} />
+                    <div className="booking-section" style={{ marginTop: '30px' }}>
+                        <p><b>날짜와 시간을 선택해 주세요</b></p>
+                        <Calendar
+                            onChange={handleDateChange}
+                            value={selectedDate}
+                            locale="ko-KR"
+                            calendarType="hebrew"
+                            formatDay={(locale, date) => date.getDate()}
+                            tileClassName={({ date }) => {
+                                const day = date.getDay();
+                                if (day === 6) return 'saturday';
+                                if (day === 0) return 'sunday';
+                                if (day === 5) return 'friday';
+                                return null;
+                            }}
+                            prev2Label={null}
+                            next2Label={null}
+                        />
+
+
                         {selectedDate && (
                             <>
                                 <p style={{ marginTop: '12px' }}><b>{selectedDate.toLocaleDateString()} 예약 시간 선택</b></p>
@@ -97,7 +116,8 @@ export default function PlaceInfo({ data }) {
                                                 borderRadius: '8px',
                                                 border: selectedTime === time ? '2px solid #007bff' : '1px solid #ccc',
                                                 background: selectedTime === time ? '#d0e7ff' : '#eee',
-                                                cursor: 'pointer'
+                                                cursor: 'pointer',
+                                                fontSize:'10px'
                                             }}
                                         >
                                             {time}
@@ -107,15 +127,8 @@ export default function PlaceInfo({ data }) {
                                 {selectedTime && (
                                     <button
                                         onClick={handleConfirmBooking}
-                                        style={{
-                                            marginTop: '16px',
-                                            padding: '10px 20px',
-                                            backgroundColor: '#007bff',
-                                            color: '#fff',
-                                            border: 'none',
-                                            borderRadius: '5px',
-                                            cursor: 'pointer'
-                                        }}
+                                        className="place-info-btn"
+                                        style={{marginTop:'20px',marginBottom:'20px'}}
                                     >
                                         예약 완료
                                     </button>
