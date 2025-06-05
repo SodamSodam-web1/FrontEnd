@@ -5,12 +5,11 @@ import redBookmark from '../../images/bookmark-red.png';
 import whiteBookmark from '../../images/bookmark-white.png';
 import { PlaceInfoContext } from './PlaceInfoContext';
 import reviewIcon from '../../images/review-icon.png';
-import 'react-calendar/dist/Calendar.css';
-import '../../App.css'
+import '../../App.css';
 
 export default function PlaceInfo({ data }) {
     const { closeInfo, likedMap, toggleLike } = useContext(PlaceInfoContext);
-    const [isBooking, setIsBooking] = useState(false);
+    const [viewMode, setViewMode] = useState('info');
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
 
@@ -24,9 +23,17 @@ export default function PlaceInfo({ data }) {
     };
 
     const handleBookingClick = () => {
-        setIsBooking(true);
+        setViewMode('booking');
         setSelectedDate(null);
         setSelectedTime(null);
+    };
+
+    const handleBackClick = () => {
+        if (viewMode === 'booking') {
+            setViewMode('info');
+        } else {
+            closeInfo();
+        }
     };
 
     const handleDateChange = (date) => {
@@ -40,12 +47,22 @@ export default function PlaceInfo({ data }) {
 
     const handleConfirmBooking = () => {
         alert(`예약 완료!\n날짜: ${selectedDate.toLocaleDateString()}\n시간: ${selectedTime}`);
-        setIsBooking(false);
+        setViewMode('info');
     };
 
     return (
         <div className="place-info">
             <div className="place-info-img" style={{ position: 'relative' }}>
+                <button onClick={handleBackClick} style={{
+                    position: 'sticky',
+                    top: '15px',
+                    left: '10px',
+                    background: 'transparent',
+                    border: 'none',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    zIndex: 9999
+                }}>{'<'}</button>
                 <button onClick={closeInfo} style={{
                     position: 'sticky',
                     top: '15px',
@@ -54,7 +71,7 @@ export default function PlaceInfo({ data }) {
                     border: 'none',
                     fontSize: '16px',
                     cursor: 'pointer',
-                    zIndex:9999
+                    zIndex: 9999
                 }}>✕</button>
             </div>
 
@@ -76,13 +93,13 @@ export default function PlaceInfo({ data }) {
                     </div>
                 </div>
 
-                {!isBooking && (
+                {viewMode !== 'booking' && (
                     <button className="place-info-btn" onClick={handleBookingClick}>
                         예약하기
                     </button>
                 )}
 
-                {isBooking && (
+                {viewMode === 'booking' && (
                     <div className="booking-section" style={{ marginTop: '30px' }}>
                         <p><b>날짜와 시간을 선택해 주세요</b></p>
                         <Calendar
@@ -102,7 +119,6 @@ export default function PlaceInfo({ data }) {
                             next2Label={null}
                         />
 
-
                         {selectedDate && (
                             <>
                                 <p style={{ marginTop: '12px' }}><b>{selectedDate.toLocaleDateString()} 예약 시간 선택</b></p>
@@ -117,7 +133,7 @@ export default function PlaceInfo({ data }) {
                                                 border: selectedTime === time ? '2px solid #007bff' : '1px solid #ccc',
                                                 background: selectedTime === time ? '#d0e7ff' : '#eee',
                                                 cursor: 'pointer',
-                                                fontSize:'10px'
+                                                fontSize: '10px'
                                             }}
                                         >
                                             {time}
@@ -128,7 +144,7 @@ export default function PlaceInfo({ data }) {
                                     <button
                                         onClick={handleConfirmBooking}
                                         className="place-info-btn"
-                                        style={{marginTop:'20px',marginBottom:'20px'}}
+                                        style={{ marginTop: '20px', marginBottom: '20px' }}
                                     >
                                         예약 완료
                                     </button>
@@ -138,7 +154,7 @@ export default function PlaceInfo({ data }) {
                     </div>
                 )}
 
-                {!isBooking && (
+                {viewMode !== 'booking' && (
                     <div className="place-info-review-list" style={{ marginTop: '12px' }}>
                         {data.reviews?.map((review, index) => (
                             <div
