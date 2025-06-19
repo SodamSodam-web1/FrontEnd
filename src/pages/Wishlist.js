@@ -1,4 +1,13 @@
+// src/pages/Wishlist.jsx
 import React from 'react';
-export default function Main() {
-    return <h1>찜 페이지</h1>;
+import '../App.css';
+import BookmarkList from '../components/reservation/BookmarkList';
+
+export default function Wishlist() {
+    return (
+        <div style={{ padding: 16 }}>
+            <h2>찜한 장소</h2>
+            <BookmarkList />
+        </div>
+    );
 }
