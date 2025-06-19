@@ -12,7 +12,6 @@ export default function BookmarkList() {
             placeId: Number(id),
             title: '', description: '', reviews: [],
             address: '', hours: '', imageUrl: ''
-            // 실제 데이터 있으면 여기에 채워주시면 됩니다
         }));
 
     if (!favoritePlaces.length) {

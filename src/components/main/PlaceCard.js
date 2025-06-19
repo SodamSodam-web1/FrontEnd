@@ -11,7 +11,6 @@ export default function PlaceCard({ place }) {
         e.stopPropagation();
         toggleLike(place.placeId);
     };
-
     return (
         <div className="place-card" onClick={() => openInfo(place)}>
             {place.imageUrl

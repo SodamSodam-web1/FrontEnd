@@ -5,7 +5,6 @@ export const PlaceInfoContext = createContext();
 export function PlaceInfoProvider({ children }) {
     const [showInfo, setShowInfo]     = useState(false);
     const [placeData, setPlaceData]   = useState(null);
-    // 이제 isLiked만 관리합니다.
     const [likedMap, setLikedMap]     = useState({}); // { [placeId]: true }
 
     const openInfo  = data => { setPlaceData(data); setShowInfo(true); };

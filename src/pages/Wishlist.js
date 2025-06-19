@@ -1,4 +1,3 @@
-// src/pages/Wishlist.jsx
 import React from 'react';
 import '../App.css';
 import BookmarkList from '../components/reservation/BookmarkList';

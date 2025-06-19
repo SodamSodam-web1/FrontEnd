@@ -1,4 +1,3 @@
-// src/api/BookmarkService.js
 import { BASE_URL } from './config';
 
 function authHeaders() {
@@ -9,7 +8,6 @@ function authHeaders() {
     };
 }
 
-/** 북마크 생성 */
 export async function addBookmark(placeId) {
     const res = await fetch(`${BASE_URL}/api/bookmarks`, {
         method: 'POST',
@@ -20,7 +18,6 @@ export async function addBookmark(placeId) {
     return res.json();  // { bookmarkId }
 }
 
-/** 북마크 삭제 */
 export async function removeBookmark(bookmarkId) {
     const res = await fetch(`${BASE_URL}/api/bookmarks/${bookmarkId}`, {
         method: 'DELETE',
@@ -29,7 +26,6 @@ export async function removeBookmark(bookmarkId) {
     if (!res.ok) throw new Error(`북마크 삭제 실패 (${res.status})`);
 }
 
-/** 찜 목록 조회 */
 export async function fetchBookmarks() {
     const res = await fetch(`${BASE_URL}/api/my/bookmarks`, {
         headers: authHeaders()

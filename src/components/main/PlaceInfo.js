@@ -181,8 +181,6 @@ export default function PlaceInfo({ data }) {
                         )}
                     </div>
                 )}
-
-                {/* 리뷰 리스트 */}
                 {viewMode !== 'booking' && (
                     <div className="place-info-review-list" style={{ marginTop: '12px' }}>
                         {data.reviews?.map((review, index) => (

@@ -18,3 +18,5 @@ export async function createReservation(placeId, reservationDateTime) {
     if (!res.ok) throw new Error(`예약 생성 실패 (${res.status})`);
     return res.json();
 }
+
+

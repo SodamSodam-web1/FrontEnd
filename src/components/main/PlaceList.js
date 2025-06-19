@@ -25,7 +25,7 @@ export const mockPlaces = [
         placeId: 3,
         title: '젤리가게',
         description: '젤리 맛집',
-        reviews: [{ username: '철수', text: '달달!' }],
+        reviews: [{ username: '철수', text: '달달함!' }],
         address: '세종 어딘가',
         hours: '11:00 ~ 19:00',
         imageUrl: ''

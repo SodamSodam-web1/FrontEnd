@@ -1,4 +1,3 @@
-// src/api/placeService.js
 import { BASE_URL } from './config';
 
 /**
