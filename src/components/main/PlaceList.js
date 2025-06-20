@@ -2,44 +2,35 @@ import React, { useEffect, useState } from 'react';
 import PlaceCard from './PlaceCard';
 import '../../App.css';
 
-export const mockPlaces = [
-    {
-        placeId: 1,
-        title: '스타벅스',
-        description: '커피 맛집',
-        reviews: [{ username: '민수', text: '굿!' }],
-        address: '두정동 어딘가',
-        hours: '09:00 ~ 22:00',
-        imageUrl: ''
-    },
-    {
-        placeId: 2,
-        title: '이디야',
-        description: '가성비 카페',
-        reviews: [{ username: '지은', text: '편해요' }],
-        address: '신부동 어딘가',
-        hours: '08:00 ~ 21:00',
-        imageUrl: ''
-    },
-    {
-        placeId: 3,
-        title: '젤리가게',
-        description: '젤리 맛집',
-        reviews: [{ username: '철수', text: '달달함!' }],
-        address: '세종 어딘가',
-        hours: '11:00 ~ 19:00',
-        imageUrl: ''
-    }
-];
-
 export default function PlaceList() {
     const [places, setPlaces] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setPlaces(mockPlaces);
+        fetch('/mock/places.json')
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
+            .then(json => {
+                setPlaces(json.places);
+            })
+            .catch(err => {
+                console.error(err);
+                alert('장소 목록을 불러오는 중 오류가 발생했습니다.');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
 
-    if (!places.length) return <div className="empty">로딩 중…</div>;
+    if (loading) {
+        return <div className="empty">로딩 중…</div>;
+    }
+
+    if (!places.length) {
+        return <div className="empty">표시할 장소가 없습니다.</div>;
+    }
 
     return (
         <div className="place-list">

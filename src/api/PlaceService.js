@@ -1,4 +1,4 @@
-import { BASE_URL } from './config';
+import { API_BASE_URL } from './config';
 
 /**
  * 키워드 기반 장소 검색
@@ -9,7 +9,8 @@ import { BASE_URL } from './config';
  * @param {string} token          - JWT 토큰
  */
 export async function fetchPlaces(query, x, y, radius, token) {
-    const url = new URL(`${BASE_URL}/api/places/keyword`);
+    // API_BASE_URL을 사용하도록 import 이름을 수정했습니다.
+    const url = new URL(`${API_BASE_URL}/api/places/keyword`);
     url.searchParams.append('query', query);
     url.searchParams.append('x', x);
     url.searchParams.append('y', y);

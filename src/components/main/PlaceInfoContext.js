@@ -1,26 +1,52 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const PlaceInfoContext = createContext();
 
 export function PlaceInfoProvider({ children }) {
-    const [showInfo, setShowInfo]     = useState(false);
-    const [placeData, setPlaceData]   = useState(null);
-    const [likedMap, setLikedMap]     = useState({}); // { [placeId]: true }
+    const [allPlaces,   setAllPlaces]   = useState([]);
+    const [likedMap,    setLikedMap]    = useState({});
+    const [reservedMap, setReservedMap] = useState({});
+    const [showInfo,    setShowInfo]    = useState(false);
+    const [placeData,   setPlaceData]   = useState(null);
 
-    const openInfo  = data => { setPlaceData(data); setShowInfo(true); };
-    const closeInfo = ()     => { setShowInfo(false); setPlaceData(null); };
+    // places.json 에서 전체 장소 로드
+    useEffect(() => {
+        fetch('/mock/places.json')
+            .then(res => res.json())
+            .then(json => setAllPlaces(json.places))
+            .catch(err => console.error('places.json 로드 실패', err));
+    }, []);
+
+    const openInfo  = place => { setPlaceData(place); setShowInfo(true);  };
+    const closeInfo = ()    => { setShowInfo(false); };
 
     const toggleLike = placeId => {
-        setLikedMap(prev => ({
-            ...prev,
-            [placeId]: !prev[placeId]
-        }));
+        setLikedMap(prev => {
+            const next = { ...prev };
+            next[placeId] ? delete next[placeId] : next[placeId] = true;
+            return next;
+        });
+    };
+
+    const toggleReservation = placeId => {
+        setReservedMap(prev => {
+            const next = { ...prev };
+            next[placeId] ? delete next[placeId] : next[placeId] = true;
+            return next;
+        });
     };
 
     return (
         <PlaceInfoContext.Provider value={{
-            showInfo, placeData, openInfo, closeInfo,
-            likedMap, toggleLike
+            allPlaces,
+            likedMap,
+            reservedMap,
+            showInfo,
+            placeData,
+            openInfo,
+            closeInfo,
+            toggleLike,
+            toggleReservation
         }}>
             {children}
         </PlaceInfoContext.Provider>
