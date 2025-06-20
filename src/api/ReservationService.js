@@ -1,22 +1,26 @@
-import { BASE_URL } from './config';
-
-/**
- * 예약 생성
- * @param {number|string} placeId
- * @param {string} reservationDateTime  // "YYYY-MM-DDThh:mm:ss"
- * @returns {Promise<object>}
- */
-export async function createReservation(placeId, reservationDateTime) {
-    const res = await fetch(`${BASE_URL}/reservations`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ placeId, reservationDateTime })
-    });
-    if (!res.ok) throw new Error(`예약 생성 실패 (${res.status})`);
-    return res.json();
+export function fetchReservations() {
+    return fetch('/mock/places.json')
+        .then(res => {
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+        })
+        .then(json => ({
+            data: json.places.map(p => ({
+                reservationId: p.placeId,
+                placeId:       p.placeId,
+                reservationPlaceName: p.title,
+                reservationDateTime:  '2025-07-01T12:00:00',  // 임의 날짜
+                placeAddress:  p.address,
+                hours:         p.hours,
+                imageUrl:      p.imageUrl,
+            }))
+        }));
 }
 
+export function createReservation(placeId, reservationDateTime) {
+    return Promise.resolve({ data: { reservationId: Date.now() } });
+}
 
+export function removeReservation(reservationId) {
+    return Promise.resolve();
+}

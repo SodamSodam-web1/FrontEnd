@@ -1,35 +1,18 @@
-import { BASE_URL } from './config';
+import client from './client';
 
-function authHeaders() {
-    const token = localStorage.getItem('token');
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
+export function fetchBookmarks() {
+    return fetch('/mock/places.json')          // public/mock/places.json
+        .then(res => {
+            if (!res.ok) throw new Error(res.status);
+            return res.json();
+        })
+        .then(json => ({ data: json.places }));  // axios 호환 형태
 }
 
-export async function addBookmark(placeId) {
-    const res = await fetch(`${BASE_URL}/api/bookmarks`, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify({ placeId })
-    });
-    if (!res.ok) throw new Error(`북마크 생성 실패 (${res.status})`);
-    return res.json();  // { bookmarkId }
+export function addBookmark(placeId) {
+    return Promise.resolve({ data: { bookmarkId: Date.now() } });
 }
 
-export async function removeBookmark(bookmarkId) {
-    const res = await fetch(`${BASE_URL}/api/bookmarks/${bookmarkId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    if (!res.ok) throw new Error(`북마크 삭제 실패 (${res.status})`);
-}
-
-export async function fetchBookmarks() {
-    const res = await fetch(`${BASE_URL}/api/my/bookmarks`, {
-        headers: authHeaders()
-    });
-    if (!res.ok) throw new Error(`찜 목록 조회 실패 (${res.status})`);
-    return res.json();  // [{ bookmarkId, placeId }, …]
+export function removeBookmark(bookmarkId) {
+    return Promise.resolve();
 }
