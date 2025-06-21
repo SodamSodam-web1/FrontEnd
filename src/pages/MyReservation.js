@@ -1,10 +1,12 @@
 import React from 'react';
 import ReservationList from '../components/reservation/ReservationList'
-
+import '../App.css'
 export default function MyReservation() {
     return (
         <div>
-            <h3>나의 예약</h3>
+            <div className="place-name">
+                <span>나의 예약</span>
+            </div>
             <ReservationList />
         </div>
     );
