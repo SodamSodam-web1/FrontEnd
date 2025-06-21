@@ -1,31 +1,54 @@
-import React from 'react';
-import PlaceCard from '../main/PlaceCard';
+// src/components/reservation/BookmarkList.js
+import React, { useContext } from 'react';
+import { PlaceInfoContext } from '../main/PlaceInfoContext';
+import redBookmark from '../../images/bookmark-red.png';
+import whiteBookmark from '../../images/bookmark-white.png';
 import '../../App.css';
 
-const mockBookmarks = [
-    {
-        placeId: 1,
-        title: '스타벅스',
-        address: '두정동 어딘가',
-        imageUrl: ''
-    },
-    {
-        placeId: 2,
-        title: '이디야',
-        address: '신부동 어딘가',
-        imageUrl: ''
-    }
-];
-
 export default function BookmarkList() {
-    if (!mockBookmarks.length) {
-        return <div className="empty">찜한 장소가 없습니다.</div>;
+    const { allPlaces, likedMap, toggleLike } = useContext(PlaceInfoContext);
+    const favorites = allPlaces.filter(p => likedMap[p.placeId]);
+
+    if (!favorites.length) {
+        return <div className="empty">하트를 눌러 찜한 장소를 추가하세요 !</div>;
     }
+
     return (
-        <div className="place-list">
-            {mockBookmarks.map(p => (
-                <PlaceCard key={p.placeId} place={p} />
-            ))}
+        <div className="bookmark-list">
+            {favorites.map(place => {
+                const isLiked = !!likedMap[place.placeId];
+                return (
+                    <div key={place.placeId} className="bookmark-item">
+                        {/* 헤더: 제목·주소 + 버튼 */}
+                        <div className="bookmark-header">
+                            <div>
+                                <h3 className="bookmark-title">{place.title}</h3>
+                                <p className="bookmark-address">{place.address}</p>
+                            </div>
+                            <button
+                                className="bookmark-btn"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    toggleLike(place.placeId);
+                                }}
+                            >
+                                <img
+                                    src={isLiked ? redBookmark : whiteBookmark}
+                                    alt={isLiked ? '찜 해제' : '찜'}
+                                    className="bookmark-icon"
+                                />
+                            </button>
+                        </div>
+                        {/* 이미지 */}
+                        <div className="bookmark-image">
+                            {place.imageUrl
+                                ? <img src={place.imageUrl} alt={place.title} />
+                                : <div className="bookmark-img placeholder" />
+                            }
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 }
